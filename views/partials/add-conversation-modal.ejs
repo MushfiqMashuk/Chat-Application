@@ -1,0 +1,150 @@
+<div class="modal-wrapper" id="add-conversation-modal">
+  <div class="modal">
+    <a onclick="closeModal()" class="modal-close">+</a>
+    <div class="modal-title">
+      <h2>Create New Conversation</h2>
+    </div>
+    <div class="modal-body">
+      <form id="add-conversation-form">
+        <input
+          type="text"
+          placeholder="search user by name or email or mobile"
+          name="user"
+          id="user"
+          autocomplete="off"
+        />
+        <p class="error"></p>
+        <div class="search_users"></div>
+        <input type="submit" value="Submit" class="hide" />
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+
+   const modal = document.querySelector("#add-conversation-modal");
+  // typing detector
+  let typingTimer;
+  const typingInterval = 500;
+  
+  let users_placeholder = document.querySelector(".search_users");
+  const input = document.querySelector("input#user");
+
+  // conversation created failure toast
+  const conversationFailureToast = Toastify({
+    text: "Error creating a conversation!",
+    duration: 1000,
+  });
+
+  function closeModal(){
+    modal.style.display = "none";
+    // reset
+    users_placeholder.style.display = "none";
+    input.value = "";
+  }
+
+  function openModal(){
+    modal.style.display = "block";
+  }
+
+ 
+  input.addEventListener("keyup", function () {
+    clearTimeout(typingTimer);
+
+    // reset
+    users_placeholder.style.display = "none";
+
+    if(input.value){
+      typingTimer = setTimeout(searchUser, typingInterval); // when the user is finished typing send request
+    }
+  });
+
+  // will not send request when the user is typing
+  input.addEventListener("keydown", function () {
+    clearTimeout(typingTimer);
+  });
+
+
+  // send request for search
+  async function searchUser(){
+    const response = await fetch("/inbox/search", {
+      method: "POST",
+      body: JSON.stringify({
+        user: input.value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    const result = await response.json();
+
+    if(result.errors){
+      const errorplaceholder = document.querySelector("p.error");
+      errorplaceholder.textContent = result.errors.common.msg;
+      errorplaceholder.style.display = "block";
+    } else {
+      if(result.length > 0){
+        let generatedHtml = `<ul;>`;
+
+        result.forEach(user => {
+          const avatar = user.avatar ? `./uploads/avatars/${user.avatar}` : `./images/nophoto.png`;
+
+          generatedHtml += `<li onclick="createConversation('${user._id}', '${user.name}', '${user.avatar}')">
+              <div class="user">
+                <div class="avatar">
+                  <img src="${avatar}" />
+                </div>
+                <div class="username">${user.name}</div>
+              </div>
+            </li>`;
+        });
+        generatedHtml += `</ul>`;
+        users_placeholder.innerHTML = generatedHtml;
+        users_placeholder.style.display = "block";
+      }
+    }
+
+  }
+  
+  // create Conversation
+  async function createConversation(participant_id, participant_name, participant_avatar){
+    try {
+      const response = await fetch("/inbox/conversation", {
+        method: "POST",
+
+        body: JSON.stringify({
+          participant: participant_name,
+          id: participant_id,
+          avatar: participant_avatar !== 'undefined' ? participant_avatar : null,
+        }),
+
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      if(!result.errors){
+        // reset 
+        users_placeholder.style.display = "none";
+        input.value = participant_name;
+
+        // reload the page after 1 sec
+        setTimeout(()=>{
+          location.reload();
+        }, 1000);
+
+      } else {
+        throw new Error(result.errors.common.msg);
+      }
+
+    } catch (err) {
+      conversationFailureToast.showToast();
+    }
+  }
+
+
+</script>

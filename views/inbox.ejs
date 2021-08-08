@@ -9,7 +9,7 @@
           <% if(conversation.creator.id == loggedInUser.userid) { %>
             <div class="conversation" onclick="getMessages('<%= conversation._id %>','<%= conversation.participant.name %>')">
               <% if (conversation.participant.avatar) { %>
-                <img src="./uploads/avatars/<%= conversation.participant.avatar %>" alt="<%= conversationparticipant.name %>" />
+                <img src="./uploads/avatars/<%= conversation.participant.avatar %>" alt="<%= conversation.participant.name %>" />
               <% } else { %>
                 <img src="./images/nophoto.png" />
               <% } %>

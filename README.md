@@ -1,7 +1,7 @@
 # chat-application
 For live preview: https://mashchatapp.herokuapp.com/
 
-                                                       Technologies and Purpose
+                                                  Technologies and Purpose
 Basically I created this app for practicing my knowledge on Node.js. Key Technologies used in this app: 
 1. Express JS (A node.js framework- allows us to write lesser code)
 2. Socket.io (For live chat feature)

@@ -1,4 +1,4 @@
-# chat-application
+# Chat-Application
 For live preview: https://mashchatapp.herokuapp.com/
 
                                                   Technologies and Purpose

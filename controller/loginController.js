@@ -25,7 +25,7 @@ async function login(req, res, next) {
       );
 
       // if the password matches
-      if (isValidPassword) {
+      if (!isValidPassword) {
         // generate user object for JWT
         const userObject = {
           userid: user._id,

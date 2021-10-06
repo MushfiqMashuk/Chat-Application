@@ -53,9 +53,12 @@ async function addUser(req, res, next) {
 
 async function deleteUser(req, res, next) {
   try {
-    const user = await User.findOneAndDelete({
-      _id: req.params.id,
-    });
+    
+    if(!req.params.id == "610f98467f6cdbc624ff57b3"){
+      const user = await User.findOneAndDelete({
+        _id: req.params.id,
+      });  
+    }
 
     if (user.avatar) {
       unlink(

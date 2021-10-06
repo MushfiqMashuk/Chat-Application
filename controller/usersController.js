@@ -9,6 +9,7 @@ const Conversation = require("../models/Conversation");
 async function getUsers(req, res, next) {
   try {
     const users = await User.find();
+    console.log(users);
 
     res.render("users", {
       users: users,

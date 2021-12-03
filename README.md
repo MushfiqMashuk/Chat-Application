@@ -1,7 +1,9 @@
 # Chat-Application
 
-Login with email or phone: al@gmail.com, +8801711111111
-# Password: 12345aA7&
+##### Admin login with email or phone: al@gmail.com, +8801711111111
+##### Password: 12345aA7&
+
+*** User can not create account. Only an admin can add an user ***  
 
 For live preview: https://mashchatapp.herokuapp.com/
 

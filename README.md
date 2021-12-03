@@ -1,7 +1,7 @@
 # Chat-Application
 
 Login with email or phone: al@gmail.com, +8801711111111
-Password: 12345aA7&
+# Password: 12345aA7&
 
 For live preview: https://mashchatapp.herokuapp.com/
 
